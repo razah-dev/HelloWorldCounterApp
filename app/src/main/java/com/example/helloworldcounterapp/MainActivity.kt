@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -65,7 +66,7 @@ fun CounterScreen(userName: String, modifier: Modifier = Modifier) {
 @Composable
 fun CounterValueText(modifier: Modifier = Modifier) {
     Log.i(LOG_TAG,  "Starting compose function Counter Value Text")
-    var counter: Int by remember { mutableStateOf(0) }
+    var counter: Int by rememberSaveable { mutableStateOf(0) }
     Column (
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
