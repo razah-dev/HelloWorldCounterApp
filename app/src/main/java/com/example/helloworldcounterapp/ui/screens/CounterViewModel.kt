@@ -1,4 +1,4 @@
-package com.example.helloworldcounterapp.ui
+package com.example.helloworldcounterapp.ui.screens
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
