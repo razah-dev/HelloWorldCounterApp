@@ -16,19 +16,19 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.helloworldcounterapp.ui.CounterUiState
+import com.example.helloworldcounterapp.ui.CounterViewModel
 import com.example.helloworldcounterapp.ui.theme.HelloWorldCounterAppTheme
-import kotlin.collections.plusAssign
 
-private val LOG_TAG: String = "MainActivityTag"
+private const val LOG_TAG: String = "MainActivity"
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             HelloWorldCounterAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                Scaffold(
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
                     CounterScreen(
                         userName = "Raza Hussain",
                         modifier =
@@ -51,69 +53,110 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun CounterScreen(userName: String, modifier: Modifier = Modifier) {
-    Log.i(LOG_TAG,  "Starting compose function Counter Screen")
-    Column {
-        Text(
-            text = "Greetings $userName!",
-            modifier = modifier,
-            style = MaterialTheme.typography.displayLarge
-        )
-        CounterValueText(modifier = modifier)
-    }
+fun CounterScreen(
+    userName: String,
+    modifier: Modifier = Modifier,
+    viewModel: CounterViewModel = viewModel()
+) {
+    Log.i(LOG_TAG,  "Composable CounterScreen() called")
+    val uiState: CounterUiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    CounterScreenContent(
+        userName = userName,
+        counterValue = uiState.counter,
+        onIncrement = { viewModel.incrementCounter() },
+        onReset = { viewModel.resetCounter() },
+        modifier = modifier
+    )
 }
 
 @Composable
-fun CounterValueText(modifier: Modifier = Modifier) {
-    Log.i(LOG_TAG,  "Starting compose function Counter Value Text")
-    var counter: Int by rememberSaveable { mutableStateOf(0) }
+fun CounterScreenContent(
+    userName: String,
+    counterValue: Int,
+    onIncrement: () -> Unit,
+    onReset: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Log.i(LOG_TAG,  "Composable CounterScreenContent() called")
     Column (
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(60.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Counter Value: $counter",
-            modifier = modifier,
-            style = MaterialTheme.typography.displayLarge
-        )
-        CounterIncrementButton(
-            onButtonClick = {
-                counter += 1
-                Log.i(LOG_TAG, "Increment button clicked. Counter: $counter") },
-            modifier = modifier)
-        CounterResetButton(
-            onButtonClick = {
-                counter = 0
-                Log.i(LOG_TAG, "Reset button clicked. Counter: $counter") },
-            modifier = modifier)
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CounterTextComposable(
+                text = "Greetings",
+                textStyle = MaterialTheme.typography.displayMedium
+            )
+            CounterTextComposable(
+                text = "$userName!",
+                textStyle = MaterialTheme.typography.displayMedium
+            )
+        }
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CounterTextComposable(
+                text = "Counter Value:",
+                textStyle = MaterialTheme.typography.displayMedium
+            )
+            CounterTextComposable(
+                text = "$counterValue",
+                textStyle = MaterialTheme.typography.displayMedium
+            )
+        }
+        Column (
+            verticalArrangement = Arrangement.spacedBy(60.dp)
+        ) {
+            CounterButtonComposable(
+                buttonText = "Increment\nCounter",
+                buttonTextStyle = MaterialTheme.typography.displayMedium,
+                onButtonClick = onIncrement
+            )
+            CounterButtonComposable(
+                buttonText = "Reset\nCounter",
+                buttonTextStyle = MaterialTheme.typography.displayMedium,
+                onButtonClick = onReset
+            )
+        }
     }
 }
 
 @Composable
-fun CounterIncrementButton(onButtonClick: () -> Unit, modifier: Modifier = Modifier) {
-    Log.i(LOG_TAG,  "Starting compose function Counter Increment Button")
-    FilledTonalButton(
-        onClick = onButtonClick
-    ) {
-        Text(
-            text = "Increment Count",
-            modifier = modifier,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.displayLarge
-        )
-    }
+fun CounterTextComposable(
+    text: String,
+    textStyle: TextStyle,
+    modifier: Modifier = Modifier
+) {
+    Log.i(LOG_TAG,  "Composable CounterTextComposable() called with text = $text")
+
+    Text(
+        text = text,
+        modifier = modifier,
+        style = textStyle
+    )
 }
 
 @Composable
-fun CounterResetButton(onButtonClick: () -> Unit, modifier: Modifier = Modifier) {
-    Log.i(LOG_TAG,  "Starting compose function Counter Reset Button")
+fun CounterButtonComposable(
+    buttonText: String,
+    buttonTextStyle: TextStyle,
+    onButtonClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Log.i(LOG_TAG,  "Composable CounterButtonComposable() called with buttonText = $buttonText")
+
     FilledTonalButton(
-        onClick = onButtonClick
+        onClick = onButtonClick,
+        modifier = modifier.fillMaxWidth()
     ) {
         Text(
-            text = "Reset Count",
-            modifier = modifier,
+            text = buttonText,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.displayLarge
+            style = buttonTextStyle
         )
     }
 }
@@ -122,7 +165,7 @@ fun CounterResetButton(onButtonClick: () -> Unit, modifier: Modifier = Modifier)
 @Composable
 fun CounterScreenPreview() {
     HelloWorldCounterAppTheme {
-        CounterScreen("Raza")
+        CounterScreen("Raza Hussain")
     }
 }
 
