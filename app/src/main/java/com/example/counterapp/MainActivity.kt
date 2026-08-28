@@ -1,4 +1,4 @@
-package com.example.helloworldcounterapp
+package com.example.counterapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,8 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.helloworldcounterapp.ui.screens.CounterScreen
-import com.example.helloworldcounterapp.ui.theme.HelloWorldCounterAppTheme
+import com.example.counterapp.ui.MainCountersScreen
+import com.example.counterapp.ui.theme.HelloWorldCounterAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
-                    CounterScreen(
+                    MainCountersScreen(
                         userName = "Raza Hussain",
                         modifier =
                             Modifier
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun CounterScreenPreview() {
     HelloWorldCounterAppTheme {
-        CounterScreen("Raza Hussain")
+        MainCountersScreen("Raza Hussain")
     }
 }
 

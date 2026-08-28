@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.helloworldcounterapp"
+    namespace = "com.example.counterapp"
     compileSdk {
         version = release(37)
     }

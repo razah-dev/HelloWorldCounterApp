@@ -1,4 +1,4 @@
-package com.example.helloworldcounterapp.ui.screens
+package com.example.counterapp.ui.manualcounter
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -15,18 +15,18 @@ class CounterViewModel : ViewModel() {
     val uiState: StateFlow<CounterUiState> = _uiState.asStateFlow()
 
     fun incrementCounter() {
-        Log.i(LOG_TAG,  "CounterViewModel incrementCounter() called on ${_uiState.value}")
-        _uiState.update { currentCounterUiState ->
-            currentCounterUiState.copy(
-                counter = currentCounterUiState.counter + 1
+        Log.i(LOG_TAG,  "IncrementCounter called on ${_uiState.value}")
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
+                counter = currentUiState.counter + 1
             )
         }
     }
 
     fun resetCounter() {
-        Log.i(LOG_TAG,  "CounterViewModel resetCounter() called on ${_uiState.value}")
-        _uiState.update { currentCounterUiState ->
-            currentCounterUiState.copy(
+        Log.i(LOG_TAG,  "ResetCounter called on ${_uiState.value}")
+        _uiState.update { currentUiState ->
+            currentUiState.copy(
                 counter = 0
             )
         }

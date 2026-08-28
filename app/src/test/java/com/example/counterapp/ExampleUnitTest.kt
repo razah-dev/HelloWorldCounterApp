@@ -1,4 +1,4 @@
-package com.example.helloworldcounterapp
+package com.example.counterapp
 
 import org.junit.Test
 
