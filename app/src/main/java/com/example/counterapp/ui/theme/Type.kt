@@ -1,4 +1,4 @@
-package com.example.helloworldcounterapp.ui.theme
+package com.example.counterapp.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
