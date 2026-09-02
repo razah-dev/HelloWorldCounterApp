@@ -3,6 +3,7 @@ package com.example.counterapp.ui.autocounter
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,15 +11,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-private const val LOG_TAG: String = "AutoIncrementCounterViewModel"
+private const val LOG_TAG: String = "AutoCounterViewModel"
 
-class AutoIncrementCounterViewModel : ViewModel() {
+@HiltViewModel
+class AutoCounterViewModel @Inject constructor() : ViewModel() {
     private val _uiState: MutableStateFlow<AutoCounterUiState> =
         MutableStateFlow(AutoCounterUiState())
     val uiState: StateFlow<AutoCounterUiState> = _uiState.asStateFlow()
 
-    var autoCounterJob: Job? = null
+    private var autoCounterJob: Job? = null
 
     fun autoIncrementStart() {
         Log.i(LOG_TAG,  "AutoIncrementStart called on ${_uiState.value}")
