@@ -2,17 +2,20 @@ package com.example.counterapp.ui.manualcounter
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-private const val LOG_TAG: String = "CounterViewModel"
+private const val LOG_TAG: String = "ManualCounterViewModel"
 
-class CounterViewModel : ViewModel() {
-    private val _uiState: MutableStateFlow<CounterUiState> =
-        MutableStateFlow(CounterUiState())
-    val uiState: StateFlow<CounterUiState> = _uiState.asStateFlow()
+@HiltViewModel
+class ManualCounterViewModel @Inject constructor() : ViewModel() {
+    private val _uiState: MutableStateFlow<ManualCounterUiState> =
+        MutableStateFlow(ManualCounterUiState())
+    val uiState: StateFlow<ManualCounterUiState> = _uiState.asStateFlow()
 
     fun incrementCounter() {
         Log.i(LOG_TAG,  "IncrementCounter called on ${_uiState.value}")

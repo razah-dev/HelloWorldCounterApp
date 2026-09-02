@@ -7,7 +7,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 
 private const val LOG_TAG: String = "Utils"
@@ -23,7 +22,7 @@ fun CounterTextComposable(
         text = text,
         modifier = modifier,
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.displayMedium
+        style = MaterialTheme.typography.bodyLarge
     )
 }
 
@@ -42,7 +41,7 @@ fun CounterButtonComposable(
         Text(
             text = buttonText,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.displayMedium
+            style = MaterialTheme.typography.labelLarge
         )
     }
 }
