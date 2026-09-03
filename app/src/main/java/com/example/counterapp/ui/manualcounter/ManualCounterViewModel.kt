@@ -34,4 +34,8 @@ class ManualCounterViewModel @Inject constructor() : ViewModel() {
             )
         }
     }
+
+    fun saveToCloudCounter() {
+        Log.i(LOG_TAG,  "SaveToCloudCounter called on ${_uiState.value}")
+    }
 }

@@ -22,6 +22,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.counterapp.ui.autocounter.AutoCounterScreenContent
 import com.example.counterapp.ui.autocounter.AutoCounterUiState
 import com.example.counterapp.ui.autocounter.AutoCounterViewModel
+import com.example.counterapp.ui.cloudcontent.CloudContentUiState
+import com.example.counterapp.ui.cloudcontent.CloudContentViewModel
+import com.example.counterapp.ui.cloudcontent.CloudScreenContent
 import com.example.counterapp.ui.manualcounter.ManualCounterUiState
 import com.example.counterapp.ui.manualcounter.ManualCounterViewModel
 import com.example.counterapp.ui.manualcounter.ManualCounterScreenContent
@@ -59,10 +62,12 @@ fun MainCountersScreen(
     modifier: Modifier = Modifier,
     manualCounterViewModel: ManualCounterViewModel = hiltViewModel(),
     autoCounterViewModel: AutoCounterViewModel = hiltViewModel(),
+    cloudContentViewModel: CloudContentViewModel = hiltViewModel(),
 ) {
     Log.i(LOG_TAG,  "CounterScreen started")
     val manualCounterUiState: ManualCounterUiState by manualCounterViewModel.uiState.collectAsStateWithLifecycle()
     val autoCounterUiState: AutoCounterUiState by autoCounterViewModel.uiState.collectAsStateWithLifecycle()
+    val cloudContentUiState: CloudContentUiState by cloudContentViewModel.uiState.collectAsStateWithLifecycle()
 
     Column (
         modifier = modifier,
@@ -74,6 +79,7 @@ fun MainCountersScreen(
             counterValue = manualCounterUiState.counter,
             onIncrement = { manualCounterViewModel.incrementCounter() },
             onReset = { manualCounterViewModel.resetCounter() },
+            onSaveToCloud = { manualCounterViewModel.saveToCloudCounter() },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
@@ -88,6 +94,13 @@ fun MainCountersScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
         )
+        CloudScreenContent(
+            contentFetched = cloudContentUiState.contentFetched,
+            onContentFetch = { cloudContentViewModel.contentFetch() },
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier,
+        )
     }
 }
 
@@ -100,6 +113,7 @@ fun ManualCounterScreenContentPreview() {
             counterValue = 120,
             onIncrement = { },
             onReset = { },
+            onSaveToCloud = { },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         )
