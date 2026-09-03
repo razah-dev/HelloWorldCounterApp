@@ -57,8 +57,16 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
 
+    // Hilt View Model
     implementation(libs.androidx.hilt.lifecycle.viewmodel.compose)
+
+    // Retrofit
+    implementation(libs.retrofit)
+
+    // Retrofit with Scalar Converter
+    implementation(libs.converter.scalars)
 }
