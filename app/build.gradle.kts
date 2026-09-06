@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.helloworldcounterapp"
-        minSdk = 26
+        minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -75,5 +75,6 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.okhttp)
 
+    // Kotlin standard library
     implementation(libs.kotlin.stdlib)
 }
