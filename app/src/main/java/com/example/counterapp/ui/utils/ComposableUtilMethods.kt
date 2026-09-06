@@ -22,7 +22,7 @@ fun CounterTextComposable(
         text = text,
         modifier = modifier,
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.bodyLarge
+        style = MaterialTheme.typography.displaySmall
     )
 }
 
@@ -41,7 +41,7 @@ fun CounterButtonComposable(
         Text(
             text = buttonText,
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.displaySmall
         )
     }
 }

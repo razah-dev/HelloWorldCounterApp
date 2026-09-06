@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -13,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.helloworldcounterapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -67,6 +68,12 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
 
-    // Retrofit with Scalar Converter
-    implementation(libs.converter.scalars)
+    // Kotlin serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // Retrofit with Kotlin serialization Converter
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+
+    implementation(libs.kotlin.stdlib)
 }
