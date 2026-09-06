@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.devtools.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -67,6 +68,13 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
 
-    // Retrofit with Scalar Converter
-    implementation(libs.converter.scalars)
+    // Kotlin serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // Retrofit with Kotlin serialization Converter
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
+    implementation(libs.okhttp)
+
+    // Kotlin standard library
+    implementation(libs.kotlin.stdlib)
 }

@@ -37,6 +37,9 @@ class AutoCounterViewModel @Inject constructor() : ViewModel() {
     }
 
     private suspend fun autoIncrementJob() {
+        // TODO(raza): Replace with Kotlin flows so that we do not have a
+        //  while(true) loop which would consume unnecessary cpu cycles
+        //  and drain device battery.
         while (true) {
             _uiState.update { currentUiState ->
                 currentUiState.copy(

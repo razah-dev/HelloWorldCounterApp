@@ -13,7 +13,7 @@ private const val LOG_TAG: String = "ManualCounterScreen"
 
 @Composable
 fun ManualCounterScreenContent(
-    userName: String,
+    username: String,
     counterValue: Int,
     onIncrement: () -> Unit,
     onReset: () -> Unit,
@@ -30,7 +30,7 @@ fun ManualCounterScreenContent(
         horizontalAlignment = horizontalAlignment
     ) {
         CounterTextComposable(
-            text = "Greetings $userName!"
+            text = "Greetings $username!"
         )
         CounterTextComposable(
             text = "Counter: $counterValue"

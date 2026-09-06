@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -44,7 +46,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
                     MainCountersScreen(
-                        userName = "Raza Hussain",
+                        username = "Raza Hussain",
                         modifier =
                             Modifier
                                 .padding(innerPadding)
@@ -58,7 +60,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainCountersScreen(
-    userName: String,
+    username: String,
     modifier: Modifier = Modifier,
     manualCounterViewModel: ManualCounterViewModel = hiltViewModel(),
     autoCounterViewModel: AutoCounterViewModel = hiltViewModel(),
@@ -69,13 +71,16 @@ fun MainCountersScreen(
     val autoCounterUiState: AutoCounterUiState by autoCounterViewModel.uiState.collectAsStateWithLifecycle()
     val cloudContentUiState: CloudContentUiState by cloudContentViewModel.uiState.collectAsStateWithLifecycle()
 
+    // Set username
+    manualCounterViewModel.setUsername(username = username)
+
     Column (
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(32.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         ManualCounterScreenContent(
-            userName = userName,
+            username = manualCounterUiState.username,
             counterValue = manualCounterUiState.counter,
             onIncrement = { manualCounterViewModel.incrementCounter() },
             onReset = { manualCounterViewModel.resetCounter() },
@@ -95,8 +100,9 @@ fun MainCountersScreen(
             modifier = modifier
         )
         CloudScreenContent(
-            contentFetched = cloudContentUiState.contentFetched,
-            onContentFetch = { cloudContentViewModel.contentFetch() },
+            isContentFetched = cloudContentUiState.isContentFetched,
+            counterDataUiEntryList = cloudContentUiState.counterDataUiEntryList,
+            onContentFetch = { cloudContentViewModel.fetchCounterDataList() },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier,
@@ -109,7 +115,7 @@ fun MainCountersScreen(
 fun ManualCounterScreenContentPreview() {
     HelloWorldCounterAppTheme {
         ManualCounterScreenContent(
-            userName = "Raza",
+            username = "Raza",
             counterValue = 120,
             onIncrement = { },
             onReset = { },
