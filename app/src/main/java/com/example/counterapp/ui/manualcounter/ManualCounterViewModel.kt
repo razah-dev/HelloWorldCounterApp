@@ -3,9 +3,11 @@ package com.example.counterapp.ui.manualcounter
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.counterapp.cloud.CloudApiService
 import com.example.counterapp.data.CounterData
+import com.example.counterapp.data.DataRepository
+import com.example.counterapp.modules.RemoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,11 +20,11 @@ private const val LOG_TAG: String = "ManualCounterViewModel"
 
 @HiltViewModel
 class ManualCounterViewModel @Inject constructor(
-    private val cloudCounterApi: CloudApiService
+    @RemoteRepository private val dataRepository: DataRepository
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<ManualCounterUiState> =
-        MutableStateFlow(ManualCounterUiState())
-    val uiState: StateFlow<ManualCounterUiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<CounterDataUiEntry> =
+        MutableStateFlow(CounterDataUiEntry())
+    val uiState: StateFlow<CounterDataUiEntry> = _uiState.asStateFlow()
 
     fun setUsername(username: String) {
         Log.i(LOG_TAG,  "SetUsername called on ${_uiState.value}")
@@ -33,11 +35,28 @@ class ManualCounterViewModel @Inject constructor(
         }
     }
 
+    fun timestampProcess() {
+        Log.i(LOG_TAG,  "TimestampProcess called on ${_uiState.value}")
+        // TODO(raza): Replace with Kotlin flows so that we do not have a
+        //  while(true) loop which would consume unnecessary cpu cycles
+        //  and drain device battery.
+        viewModelScope.launch {
+            while (true) {
+                _uiState.update { currentUiState ->
+                    currentUiState.copy(
+                        counterValue = currentUiState.counterValue + 1
+                    )
+                }
+                delay(timeMillis = 1000)
+            }
+        }
+    }
+
     fun incrementCounter() {
         Log.i(LOG_TAG,  "IncrementCounter called on ${_uiState.value}")
         _uiState.update { currentUiState ->
             currentUiState.copy(
-                counter = currentUiState.counter + 1
+                counterValue = currentUiState.counterValue + 1
             )
         }
     }
@@ -46,7 +65,7 @@ class ManualCounterViewModel @Inject constructor(
         Log.i(LOG_TAG,  "ResetCounter called on ${_uiState.value}")
         _uiState.update { currentUiState ->
             currentUiState.copy(
-                counter = 0
+                counterValue = 0
             )
         }
     }
@@ -56,10 +75,10 @@ class ManualCounterViewModel @Inject constructor(
         val counterData = CounterData(
             username = _uiState.value.username,
             timestamp8601ISOFormat = Clock.System.now().toString(),
-            counterValue = _uiState.value.counter
+            counterValue = _uiState.value.counterValue
         )
         viewModelScope.launch {
-            val result: CounterData = cloudCounterApi.saveManualCounterData(counterData = counterData)
+            val result: CounterData = dataRepository.saveManualCounterData(counterData = counterData)
             Log.i(LOG_TAG,  "SaveToCloudCounter RESULT: $result")
         }
     }

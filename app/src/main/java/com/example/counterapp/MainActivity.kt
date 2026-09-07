@@ -27,7 +27,7 @@ import com.example.counterapp.ui.autocounter.AutoCounterViewModel
 import com.example.counterapp.ui.cloudcontent.CloudContentUiState
 import com.example.counterapp.ui.cloudcontent.CloudContentViewModel
 import com.example.counterapp.ui.cloudcontent.CloudScreenContent
-import com.example.counterapp.ui.manualcounter.ManualCounterUiState
+import com.example.counterapp.ui.manualcounter.CounterDataUiEntry
 import com.example.counterapp.ui.manualcounter.ManualCounterViewModel
 import com.example.counterapp.ui.manualcounter.ManualCounterScreenContent
 import com.example.counterapp.ui.theme.HelloWorldCounterAppTheme
@@ -67,7 +67,7 @@ fun MainCountersScreen(
     cloudContentViewModel: CloudContentViewModel = hiltViewModel(),
 ) {
     Log.i(LOG_TAG,  "CounterScreen started")
-    val manualCounterUiState: ManualCounterUiState by manualCounterViewModel.uiState.collectAsStateWithLifecycle()
+    val manualCounterUiState: CounterDataUiEntry by manualCounterViewModel.uiState.collectAsStateWithLifecycle()
     val autoCounterUiState: AutoCounterUiState by autoCounterViewModel.uiState.collectAsStateWithLifecycle()
     val cloudContentUiState: CloudContentUiState by cloudContentViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -81,7 +81,7 @@ fun MainCountersScreen(
     ) {
         ManualCounterScreenContent(
             username = manualCounterUiState.username,
-            counterValue = manualCounterUiState.counter,
+            counterValue = manualCounterUiState.counterValue,
             onIncrement = { manualCounterViewModel.incrementCounter() },
             onReset = { manualCounterViewModel.resetCounter() },
             onSaveToCloud = { manualCounterViewModel.saveToCloudCounter() },
