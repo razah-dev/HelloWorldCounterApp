@@ -1,6 +1,7 @@
 package com.example.counterapp.ui.manualcounter
 
-data class ManualCounterUiState(
+data class CounterDataUiEntry(
     val username: String = "",
-    val counter: Int = 0,
+    val timestampHumanReadable: String = "",
+    val counterValue: Int = 0
 )

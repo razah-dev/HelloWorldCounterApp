@@ -1,10 +1,6 @@
 package com.example.counterapp.ui.cloudcontent
 
-data class CounterDataUiEntry(
-    val username: String,
-    val timestampHumanReadable: String,
-    val counterValue: Int
-)
+import com.example.counterapp.ui.manualcounter.CounterDataUiEntry
 
 data class CloudContentUiState(
     val isContentFetched: Boolean = false,

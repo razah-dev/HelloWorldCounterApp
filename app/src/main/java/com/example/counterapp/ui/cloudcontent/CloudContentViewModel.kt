@@ -3,8 +3,10 @@ package com.example.counterapp.ui.cloudcontent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.counterapp.cloud.CloudApiService
 import com.example.counterapp.data.CounterData
+import com.example.counterapp.data.DataRepository
+import com.example.counterapp.modules.RemoteRepository
+import com.example.counterapp.ui.manualcounter.CounterDataUiEntry
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +17,6 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import javax.inject.Inject
 
 private const val LOG_TAG: String = "CloudContentViewModel"
@@ -23,7 +24,7 @@ private val DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern
 
 @HiltViewModel
 class CloudContentViewModel @Inject constructor(
-    private val cloudCounterApi: CloudApiService
+    @RemoteRepository private val dataRepository: DataRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<CloudContentUiState> =
         MutableStateFlow(CloudContentUiState())
@@ -33,7 +34,7 @@ class CloudContentViewModel @Inject constructor(
         Log.i(LOG_TAG,  "FetchCounterDataList called on ${_uiState.value}")
 
         viewModelScope.launch {
-            val counterDataList: List<CounterData> = cloudCounterApi.fetchCounterDataList()
+            val counterDataList: List<CounterData> = dataRepository.fetchSavedManualCounterData()
 
             _uiState.update { currentUiState ->
                 currentUiState.copy(
