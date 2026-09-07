@@ -15,6 +15,6 @@ abstract class DataRepositoryModule {
     @Singleton
     @RemoteRepository
     abstract fun bindRemoteUserRepository(
-        remoteImpl: RemoteDataRepository
+        remoteDataRepository: RemoteDataRepository
     ): DataRepository
 }
