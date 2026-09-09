@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.counterapp.data.CounterData
-import com.example.counterapp.data.DataRepository
-import com.example.counterapp.modules.RemoteRepository
+import com.example.counterapp.data.CounterDataRepository
+import com.example.counterapp.modules.CloudDataRepository
+import com.example.counterapp.modules.LocalDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,14 +14,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 import kotlin.time.Clock
 
 private const val LOG_TAG: String = "ManualCounterViewModel"
+val DATE_TIME_FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm")
 
 @HiltViewModel
 class ManualCounterViewModel @Inject constructor(
-    @RemoteRepository private val dataRepository: DataRepository
+    @CloudDataRepository private val cloudDataRepository: CounterDataRepository,
+    @LocalDataRepository private val localDataRepository: CounterDataRepository
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<CounterDataUiEntry> =
         MutableStateFlow(CounterDataUiEntry())
@@ -43,8 +50,11 @@ class ManualCounterViewModel @Inject constructor(
         viewModelScope.launch {
             while (true) {
                 _uiState.update { currentUiState ->
+                    val zonedDateTime: ZonedDateTime = Instant
+                        .parse(Clock.System.now().toString())
+                        .atZone(ZoneId.of("Z"))  // UTC Time Zone
                     currentUiState.copy(
-                        counterValue = currentUiState.counterValue + 1
+                        timestampHumanReadable = "${zonedDateTime.format(DATE_TIME_FORMATTER)} UTC"
                     )
                 }
                 delay(timeMillis = 1000)
@@ -78,7 +88,22 @@ class ManualCounterViewModel @Inject constructor(
             counterValue = _uiState.value.counterValue
         )
         viewModelScope.launch {
-            val result: CounterData = dataRepository.saveManualCounterData(counterData = counterData)
+            val result: CounterData =
+                cloudDataRepository.saveCounterData(counterData = counterData)
+            Log.i(LOG_TAG,  "SaveToCloudCounter RESULT: $result")
+        }
+    }
+
+    fun saveToLocalCounter() {
+        Log.i(LOG_TAG,  "SaveToLocalCounter called on ${_uiState.value}")
+        val counterData = CounterData(
+            username = _uiState.value.username,
+            timestamp8601ISOFormat = Clock.System.now().toString(),
+            counterValue = _uiState.value.counterValue
+        )
+        viewModelScope.launch {
+            val result: CounterData =
+                localDataRepository.saveCounterData(counterData = counterData)
             Log.i(LOG_TAG,  "SaveToCloudCounter RESULT: $result")
         }
     }

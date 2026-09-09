@@ -14,10 +14,12 @@ private const val LOG_TAG: String = "ManualCounterScreen"
 @Composable
 fun ManualCounterScreenContent(
     username: String,
+    timestampHumanReadable: String,
     counterValue: Int,
     onIncrement: () -> Unit,
     onReset: () -> Unit,
     onSaveToCloud: () -> Unit,
+    onSaveToLocal: () -> Unit,
     verticalArrangement: Arrangement.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     modifier: Modifier = Modifier,
@@ -33,6 +35,9 @@ fun ManualCounterScreenContent(
             text = "Greetings $username!"
         )
         CounterTextComposable(
+            text = timestampHumanReadable
+        )
+        CounterTextComposable(
             text = "Counter: $counterValue"
         )
         CounterButtonComposable(
@@ -44,8 +49,12 @@ fun ManualCounterScreenContent(
             onButtonClick = onReset
         )
         CounterButtonComposable(
-            buttonText = "Save To Cloud",
+            buttonText = "Save To Cloud DB",
             onButtonClick = onSaveToCloud
+        )
+        CounterButtonComposable(
+            buttonText = "Save To Local DB",
+            onButtonClick = onSaveToLocal
         )
     }
 }
