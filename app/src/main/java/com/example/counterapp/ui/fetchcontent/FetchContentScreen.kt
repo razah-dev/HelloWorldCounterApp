@@ -1,4 +1,4 @@
-package com.example.counterapp.ui.cloudcontent
+package com.example.counterapp.ui.fetchcontent
 
 import android.util.Log
 import androidx.compose.foundation.background
@@ -44,15 +44,16 @@ private fun ScrollableList(
 }
 
 @Composable
-fun CloudScreenContent(
+fun FetchContentScreen(
+    textHeading: String,
     isContentFetched: Boolean,
-    counterDataUiEntryList: List<CounterDataUiEntry>,
+    counterDataList: List<CounterDataUiEntry>,
     onContentFetch: () -> Unit,
     verticalArrangement: Arrangement.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     modifier: Modifier = Modifier,
 ) {
-    Log.i(LOG_TAG,  "CloudScreenContent started")
+    Log.i(LOG_TAG,  "FetchContentScreen started")
 
     Column (
         modifier = modifier,
@@ -60,20 +61,20 @@ fun CloudScreenContent(
         horizontalAlignment = horizontalAlignment
     ) {
         CounterTextComposable(
-            text = "Cloud Content Fetch API"
+            text = textHeading
+        )
+        CounterButtonComposable(
+            buttonText = "Fetch Counter Data",
+            onButtonClick = onContentFetch
         )
         if (isContentFetched) {
             CounterTextComposable(
-                text = "Fetched ${counterDataUiEntryList.size} items"
+                text = "Fetched ${counterDataList.size} items"
             )
             ScrollableList(
-                counterDataUiEntryList = counterDataUiEntryList,
+                counterDataUiEntryList = counterDataList,
                 modifier = modifier
             )
         }
-        CounterButtonComposable(
-            buttonText = "Fetch Counter Data List",
-            onButtonClick = onContentFetch
-        )
     }
 }

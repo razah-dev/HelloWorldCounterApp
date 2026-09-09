@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.helloworldcounterapp"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -77,4 +77,8 @@ dependencies {
 
     // Kotlin standard library
     implementation(libs.kotlin.stdlib)
+
+    // Room database
+    implementation(libs.androidx.room3.runtime)
+    ksp(libs.androidx.room3.compiler)
 }

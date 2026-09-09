@@ -24,12 +24,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.counterapp.ui.autocounter.AutoCounterScreenContent
 import com.example.counterapp.ui.autocounter.AutoCounterUiState
 import com.example.counterapp.ui.autocounter.AutoCounterViewModel
-import com.example.counterapp.ui.cloudcontent.CloudContentUiState
-import com.example.counterapp.ui.cloudcontent.CloudContentViewModel
-import com.example.counterapp.ui.cloudcontent.CloudScreenContent
+import com.example.counterapp.ui.fetchcontent.CloudContentViewModel
+import com.example.counterapp.ui.fetchcontent.FetchContentScreen
+import com.example.counterapp.ui.fetchcontent.FetchContentUiState
+import com.example.counterapp.ui.fetchcontent.LocalContentViewModel
 import com.example.counterapp.ui.manualcounter.CounterDataUiEntry
-import com.example.counterapp.ui.manualcounter.ManualCounterViewModel
 import com.example.counterapp.ui.manualcounter.ManualCounterScreenContent
+import com.example.counterapp.ui.manualcounter.ManualCounterViewModel
 import com.example.counterapp.ui.theme.HelloWorldCounterAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -65,14 +66,23 @@ fun MainCountersScreen(
     manualCounterViewModel: ManualCounterViewModel = hiltViewModel(),
     autoCounterViewModel: AutoCounterViewModel = hiltViewModel(),
     cloudContentViewModel: CloudContentViewModel = hiltViewModel(),
+    localContentViewModel: LocalContentViewModel = hiltViewModel(),
 ) {
     Log.i(LOG_TAG,  "CounterScreen started")
     val manualCounterUiState: CounterDataUiEntry by manualCounterViewModel.uiState.collectAsStateWithLifecycle()
     val autoCounterUiState: AutoCounterUiState by autoCounterViewModel.uiState.collectAsStateWithLifecycle()
-    val cloudContentUiState: CloudContentUiState by cloudContentViewModel.uiState.collectAsStateWithLifecycle()
+    val cloudContentUiState: FetchContentUiState by cloudContentViewModel.uiState.collectAsStateWithLifecycle()
+    val localContentUiState: FetchContentUiState by localContentViewModel.uiState.collectAsStateWithLifecycle()
 
     // Set username
-    manualCounterViewModel.setUsername(username = username)
+    if (manualCounterUiState.username.isEmpty()) {
+        manualCounterViewModel.setUsername(username = username)
+    }
+
+    // Kick off timestamp update process (async)
+    if (manualCounterUiState.timestampHumanReadable.isEmpty()) {
+        manualCounterViewModel.timestampProcess()
+    }
 
     Column (
         modifier = modifier.verticalScroll(rememberScrollState()),
@@ -81,10 +91,12 @@ fun MainCountersScreen(
     ) {
         ManualCounterScreenContent(
             username = manualCounterUiState.username,
+            timestampHumanReadable = manualCounterUiState.timestampHumanReadable,
             counterValue = manualCounterUiState.counterValue,
             onIncrement = { manualCounterViewModel.incrementCounter() },
             onReset = { manualCounterViewModel.resetCounter() },
             onSaveToCloud = { manualCounterViewModel.saveToCloudCounter() },
+            onSaveToLocal = { manualCounterViewModel.saveToLocalCounter() },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
@@ -99,10 +111,20 @@ fun MainCountersScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
         )
-        CloudScreenContent(
+        FetchContentScreen(
+            textHeading = "Cloud DB API",
             isContentFetched = cloudContentUiState.isContentFetched,
-            counterDataUiEntryList = cloudContentUiState.counterDataUiEntryList,
-            onContentFetch = { cloudContentViewModel.fetchCounterDataList() },
+            counterDataList = cloudContentUiState.counterDataList,
+            onContentFetch = { cloudContentViewModel.fetchCounterData() },
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier,
+        )
+        FetchContentScreen(
+            textHeading = "Local DB API",
+            isContentFetched = localContentUiState.isContentFetched,
+            counterDataList = localContentUiState.counterDataList,
+            onContentFetch = { localContentViewModel.fetchCounterData() },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier,
@@ -116,10 +138,12 @@ fun ManualCounterScreenContentPreview() {
     HelloWorldCounterAppTheme {
         ManualCounterScreenContent(
             username = "Raza",
+            timestampHumanReadable = "2026/09/05 02:00 UTC",
             counterValue = 120,
             onIncrement = { },
             onReset = { },
             onSaveToCloud = { },
+            onSaveToLocal = { },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         )

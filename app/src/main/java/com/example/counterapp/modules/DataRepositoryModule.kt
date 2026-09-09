@@ -1,7 +1,8 @@
 package com.example.counterapp.modules
 
-import com.example.counterapp.data.DataRepository
-import com.example.counterapp.data.RemoteDataRepository
+import com.example.counterapp.data.CounterDataRepository
+import com.example.counterapp.data.cloud.CloudCounterDataRepository
+import com.example.counterapp.data.local.LocalCounterDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -13,8 +14,15 @@ import javax.inject.Singleton
 abstract class DataRepositoryModule {
     @Binds
     @Singleton
-    @RemoteRepository
-    abstract fun bindRemoteUserRepository(
-        remoteDataRepository: RemoteDataRepository
-    ): DataRepository
+    @CloudDataRepository
+    abstract fun bindCloudDataRepository(
+        cloudCounterDataRepository: CloudCounterDataRepository
+    ): CounterDataRepository
+
+    @Binds
+    @Singleton
+    @LocalDataRepository
+    abstract fun bindLocalDataRepository(
+        localCounterDataRepository: LocalCounterDataRepository
+    ): CounterDataRepository
 }

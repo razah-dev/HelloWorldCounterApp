@@ -4,4 +4,8 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class RemoteRepository // Tag for remote API implementation
+annotation class CloudDataRepository
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class LocalDataRepository
