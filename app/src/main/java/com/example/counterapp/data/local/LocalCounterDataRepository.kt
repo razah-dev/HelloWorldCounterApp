@@ -2,6 +2,7 @@ package com.example.counterapp.data.local
 
 import com.example.counterapp.data.CounterData
 import com.example.counterapp.data.CounterDataRepository
+import com.example.counterapp.data.cloud.CloudFileData
 import javax.inject.Inject
 
 class LocalCounterDataRepository @Inject constructor(
@@ -31,5 +32,9 @@ class LocalCounterDataRepository @Inject constructor(
                 it.counterValue
             )
         }
+    }
+
+    override suspend fun fetchAllFileIdsDataList(): List<CloudFileData> {
+        TODO("Not yet implemented")
     }
 }
