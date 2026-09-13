@@ -28,6 +28,9 @@ import com.example.counterapp.ui.fetchcontent.CloudContentViewModel
 import com.example.counterapp.ui.fetchcontent.FetchContentScreen
 import com.example.counterapp.ui.fetchcontent.FetchContentUiState
 import com.example.counterapp.ui.fetchcontent.LocalContentViewModel
+import com.example.counterapp.ui.fetchfiles.FetchFilesScreen
+import com.example.counterapp.ui.fetchfiles.FetchFilesUiState
+import com.example.counterapp.ui.fetchfiles.FetchFilesViewModel
 import com.example.counterapp.ui.manualcounter.CounterDataUiEntry
 import com.example.counterapp.ui.manualcounter.ManualCounterScreenContent
 import com.example.counterapp.ui.manualcounter.ManualCounterViewModel
@@ -67,12 +70,14 @@ fun MainCountersScreen(
     autoCounterViewModel: AutoCounterViewModel = hiltViewModel(),
     cloudContentViewModel: CloudContentViewModel = hiltViewModel(),
     localContentViewModel: LocalContentViewModel = hiltViewModel(),
+    fetchFilesViewModel: FetchFilesViewModel = hiltViewModel(),
 ) {
     Log.i(LOG_TAG,  "CounterScreen started")
     val manualCounterUiState: CounterDataUiEntry by manualCounterViewModel.uiState.collectAsStateWithLifecycle()
     val autoCounterUiState: AutoCounterUiState by autoCounterViewModel.uiState.collectAsStateWithLifecycle()
     val cloudContentUiState: FetchContentUiState by cloudContentViewModel.uiState.collectAsStateWithLifecycle()
     val localContentUiState: FetchContentUiState by localContentViewModel.uiState.collectAsStateWithLifecycle()
+    val fetchFilesUiState: FetchFilesUiState by fetchFilesViewModel.uiState.collectAsStateWithLifecycle()
 
     // Set username
     if (manualCounterUiState.username.isEmpty()) {
@@ -125,6 +130,15 @@ fun MainCountersScreen(
             isContentFetched = localContentUiState.isContentFetched,
             counterDataList = localContentUiState.counterDataList,
             onContentFetch = { localContentViewModel.fetchCounterData() },
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = modifier,
+        )
+        FetchFilesScreen(
+            textHeading = "Cloud Fetch / Download Files API",
+            isFetchedFileIdsForDevice = fetchFilesUiState.isFetchedFileIdsForDevice,
+            allFileIdsForDevice = fetchFilesUiState.allFileIdsForDevice,
+            onButtonClickFetchFileIds = { fetchFilesViewModel.fetchAllFileIdsDataList() },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier,

@@ -39,4 +39,8 @@ class CloudCounterDataRepository @Inject constructor(
             )
         }
     }
+
+    override suspend fun fetchAllFileIdsDataList(): List<CloudFileData> {
+        return cloudCounterDataApiService.fetchAllFileIdsDataList(deviceId = 120)
+    }
 }
