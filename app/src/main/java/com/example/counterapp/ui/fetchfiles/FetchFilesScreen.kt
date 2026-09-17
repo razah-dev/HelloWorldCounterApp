@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,6 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.counterapp.ui.utils.CounterButtonComposable
 import com.example.counterapp.ui.utils.CounterTextComposable
+import com.example.counterapp.ui.utils.SimpleTextBox
+
+private const val LOG_TAG: String = "FetchFilesScreen"
 
 @Composable
 private fun ScrollableList(
@@ -45,6 +49,8 @@ fun FetchFilesScreen(
     isFetchedFileIdsForDevice: Boolean,
     allFileIdsForDevice: List<Int>,
     onButtonClickFetchFileIds: () -> Unit,
+    inputFileIdToDownload: TextFieldState,
+    onButtonClickFileIdToDownload: () -> Unit,
     verticalArrangement: Arrangement.Vertical,
     horizontalAlignment: Alignment.Horizontal,
     modifier: Modifier = Modifier,
@@ -70,5 +76,14 @@ fun FetchFilesScreen(
                 modifier = modifier
             )
         }
+        SimpleTextBox(
+            textFieldState = inputFileIdToDownload,
+            labelText = "Enter File ID to download",
+            modifier = modifier
+        )
+        CounterButtonComposable(
+            buttonText = "Submit File ID to download",
+            onButtonClick = onButtonClickFileIdToDownload
+        )
     }
 }

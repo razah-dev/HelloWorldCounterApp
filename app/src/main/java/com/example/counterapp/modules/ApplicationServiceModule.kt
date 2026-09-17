@@ -1,5 +1,6 @@
 package com.example.counterapp.modules
 
+import android.content.ContentResolver
 import android.content.Context
 import androidx.room3.Room
 import androidx.sqlite.driver.AndroidSQLiteDriver
@@ -14,7 +15,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 // TODO (raza): Change to remote (cloud) endpoint once
@@ -28,11 +31,21 @@ private const val CLOUD_COUNTER_DATA_SERVER_BASE_URL = "http://10.0.2.2:8000"
 object ApplicationServiceModule {
     @Provides
     @Singleton
-    fun provideCloudCounterDataApiService(
+    fun provideOkHttpClient(): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
 
+    @Provides
+    @Singleton
+    fun provideCloudCounterDataApiService(
+        okHttpClient: OkHttpClient
     ): CloudCounterDataApiService {
         return Retrofit.Builder()
             .baseUrl(CLOUD_COUNTER_DATA_SERVER_BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(
                 Json.asConverterFactory(
                     "application/json; charset=utf-8".toMediaType()))
@@ -42,11 +55,20 @@ object ApplicationServiceModule {
 
     @Provides
     @Singleton
+    fun provideContentResolver(
+        @ApplicationContext context: Context
+    ): ContentResolver {
+        return context.contentResolver
+    }
+
+
+    @Provides
+    @Singleton
     fun provideLocalRoomDatabase(
-        @ApplicationContext applicationContext: Context
+        @ApplicationContext context: Context
     ): LocalRoomDatabase {
         return Room.databaseBuilder<LocalRoomDatabase>(
-            context = applicationContext,
+            context = context,
             name = "my-counterapp-db")
             .setDriver(AndroidSQLiteDriver())
             .build()

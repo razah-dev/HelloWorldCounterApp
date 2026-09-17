@@ -1,6 +1,7 @@
 package com.example.counterapp.ui.fetchfiles
 
 import android.util.Log
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.counterapp.data.CounterData
@@ -10,11 +11,14 @@ import com.example.counterapp.modules.CloudDataRepository
 import com.example.counterapp.ui.manualcounter.CounterDataUiEntry
 import com.example.counterapp.ui.utils.shortHumanReadableTimestamp
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 private const val LOG_TAG: String = "FetchFilesViewModel"
@@ -27,6 +31,8 @@ class FetchFilesViewModel @Inject constructor(
         MutableStateFlow(FetchFilesUiState())
     val uiState: StateFlow<FetchFilesUiState> = _uiState.asStateFlow()
 
+    val singleFileIdToDownload: TextFieldState = TextFieldState()
+
     fun fetchAllFileIdsDataList() {
         Log.i(LOG_TAG,  "FetchAllFileIdsDataList called on ${_uiState.value}")
 
@@ -38,6 +44,17 @@ class FetchFilesViewModel @Inject constructor(
                     isFetchedFileIdsForDevice = true,
                     allFileIdsForDevice = allFileIdsList.map { it.fileId }
                 )
+            }
+        }
+    }
+
+    fun downloadFileForFileId() {
+        Log.i(LOG_TAG,  "DownloadFileForFileId called on ${singleFileIdToDownload.text}")
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val result = cloudDataRepository.downloadFileForFileId(
+                    singleFileIdToDownload.text.toString().toInt())
+                Log.i(LOG_TAG,  "DownloadFileForFileId result $result")
             }
         }
     }
