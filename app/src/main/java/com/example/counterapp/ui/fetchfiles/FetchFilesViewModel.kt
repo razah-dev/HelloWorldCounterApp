@@ -52,9 +52,13 @@ class FetchFilesViewModel @Inject constructor(
         Log.i(LOG_TAG,  "DownloadFileForFileId called on ${singleFileIdToDownload.text}")
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val result = cloudDataRepository.downloadFileForFileId(
-                    singleFileIdToDownload.text.toString().toInt())
-                Log.i(LOG_TAG,  "DownloadFileForFileId result $result")
+                try {
+                    val result = cloudDataRepository.downloadFileForFileId(
+                        singleFileIdToDownload.text.toString().toInt())
+                    Log.i(LOG_TAG,  "DownloadFileForFileId result $result")
+                } catch (e: Exception) {
+                    Log.i(LOG_TAG,  "DownloadFileForFileId EXCEPTION $e")
+                }
             }
         }
     }

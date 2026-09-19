@@ -169,7 +169,8 @@ class CloudCounterDataRepository @Inject constructor(
         // FETCH THE FILE CONTENTS FROM FILE STORED ON CLOUD
         val filePreSignedUrl =
             //"https://a7df74963846fbabdabf1ed8267e71b4.r2.cloudflarestorage.com/kiosk-videos-sept14th-2026/Post-data-repository-changes-demo.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=27945a4cc6319081127b1584d9611182%2F20260917%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260917T135622Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=b2b59649af24c7e859749b03972b425d67acc6e16c1797bb74ab537babd280d6"
-            "https://a7df74963846fbabdabf1ed8267e71b4.r2.cloudflarestorage.com/kiosk-videos-sept14th-2026/Remember%20Saveable%20Short%20demo.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=27945a4cc6319081127b1584d9611182%2F20260917%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260917T155150Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=8b77aae3142169055c225f570e1640d82fbf1cf35b742ed41ffb808f04cf5d97"
+            //"https://a7df74963846fbabdabf1ed8267e71b4.r2.cloudflarestorage.com/kiosk-videos-sept14th-2026/Remember%20Saveable%20Short%20demo.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=27945a4cc6319081127b1584d9611182%2F20260917%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260917T155150Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=8b77aae3142169055c225f570e1640d82fbf1cf35b742ed41ffb808f04cf5d97"
+            "https://a7df74963846fbabdabf1ed8267e71b4.r2.cloudflarestorage.com/kiosk-videos-sept14th-2026/Remember%20Saveable%20Short%20demo.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=27945a4cc6319081127b1584d9611182%2F20260919%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260919T175640Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&X-Amz-Signature=3ad8def677edc8a6eb6f8aa40b0bda037578a3510361e52cab507d62cb87cab8"
 
         val request = Request.Builder()
             .url(filePreSignedUrl)
