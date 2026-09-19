@@ -139,6 +139,8 @@ fun MainCountersScreen(
             isFetchedFileIdsForDevice = fetchFilesUiState.isFetchedFileIdsForDevice,
             allFileIdsForDevice = fetchFilesUiState.allFileIdsForDevice,
             onButtonClickFetchFileIds = { fetchFilesViewModel.fetchAllFileIdsDataList() },
+            inputFileIdToDownload = fetchFilesViewModel.singleFileIdToDownload,
+            onButtonClickFileIdToDownload = { fetchFilesViewModel.downloadFileForFileId() },
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier,

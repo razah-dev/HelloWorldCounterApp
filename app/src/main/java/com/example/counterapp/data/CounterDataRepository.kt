@@ -8,4 +8,6 @@ interface CounterDataRepository {
     suspend fun fetchCounterData(): List<CounterData>
 
     suspend fun fetchAllFileIdsDataList(): List<CloudFileData>
+
+    suspend fun downloadFileForFileId(fileId: Int): Boolean
 }

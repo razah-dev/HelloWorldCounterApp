@@ -16,4 +16,8 @@ class InMemoryCounterDataRepository(): CounterDataRepository {
     override suspend fun fetchAllFileIdsDataList(): List<CloudFileData> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun downloadFileForFileId(fileId: Int): Boolean {
+        TODO("Not yet implemented")
+    }
 }

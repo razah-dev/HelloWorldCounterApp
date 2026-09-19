@@ -2,9 +2,12 @@ package com.example.counterapp.ui.utils
 
 import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
@@ -44,4 +47,17 @@ fun CounterButtonComposable(
             style = MaterialTheme.typography.displaySmall
         )
     }
+}
+
+@Composable
+fun SimpleTextBox(
+    textFieldState: TextFieldState,
+    labelText: String,
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        state = textFieldState,
+        modifier = modifier,
+        label = { Text(labelText) }
+    )
 }
